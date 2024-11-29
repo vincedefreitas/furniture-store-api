@@ -3,10 +3,15 @@ const { getDatabase } = require("../Services/databaseConnector");
 const getProducts = async (req, res) => {
   let currencies = ["GBP", "USD", "EUR", "YEN"];
   let cat = req.query.cat;
+  let inStockOnly = req.query.instockonly;
   let currency = req.query.currency;
   let query =
     "SELECT `id`, `price`, `stock`, `color` FROM `furniture` WHERE `category` = ";
-  query += `${cat};`;
+  query += `${cat}`;
+
+  if (inStockOnly === "1") {
+    query += " AND `stock` > 0;";
+  }
 
   try {
     const db = await getDatabase();
