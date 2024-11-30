@@ -1,3 +1,4 @@
+const { convertFromGbp } = require("../Services/currencyConverter");
 const { getDatabase } = require("../Services/databaseConnector");
 const { convertFromMillimetres } = require("../Services/measurementConverter");
 
@@ -17,6 +18,7 @@ const getProduct = async (req, res) => {
     product[0].width = convertFromMillimetres(unit, product[0].width);
     product[0].height = convertFromMillimetres(unit, product[0].height);
     product[0].depth = convertFromMillimetres(unit, product[0].depth);
+    product[0].price = convertFromGbp(currency, product[0].price);
 
     if (!product.length) {
       return res.status(400).json({ message: "Invalid product id", data: [] });

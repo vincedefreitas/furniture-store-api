@@ -1,3 +1,4 @@
+const { convertFromGbp } = require("../Services/currencyConverter");
 const { getDatabase } = require("../Services/databaseConnector");
 
 const getProducts = async (req, res) => {
@@ -16,6 +17,10 @@ const getProducts = async (req, res) => {
   try {
     const db = await getDatabase();
     const products = await db.query(query);
+
+    products.forEach((product) => {
+      product.price = convertFromGbp(currency, product.price);
+    });
 
     if (!products.length) {
       return res.status(400).json({ message: "Invalid category id", data: [] });
